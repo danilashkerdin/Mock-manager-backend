@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./backend/mock_manager.db:/app/mock_manager.db
+      # kubeconfig — должен содержать credentials для доступа к кластеру
+      # Teleport 17 предустановлен в образе, достаточно `tsh login` перед запуском
+      - ${KUBECONFIG:-~/.kube/config}:/root/.kube/config:ro
+    environment:
+      - KUBECONFIG=/root/.kube/config
+      - K8S_NAMESPACE=${K8S_NAMESPACE:-payment-cards}
+      - DEBUG=${DEBUG:-false}
+      - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL:-}
+      - BAND_WEBHOOK_URL=${BAND_WEBHOOK_URL:-}
+      - SECRET_KEY=${SECRET_KEY:-change-me-in-production}
+    restart: unless-stopped
+
+  frontend:
+    build: ./ui/mock_manager_flutter
+    ports:
+      - "${FRONTEND_PORT:-80}:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

@@ -1,0 +1,13 @@
+{
+  "_description": "Example mock data — copy to mock_data.json and customize for your team.",
+  "_instructions": "Replace service names and env vars with your actual deployments.",
+  "service-a": {
+    "MOCK_ENABLED": "false",
+    "FEIGN_EXTERNAL_API": "false"
+  },
+  "service-b": {
+    "MOCK_ENABLED": "false"
+  },
+  "service-c": {},
+  "service-d": {}
+}
